@@ -2,24 +2,21 @@ create or replace function acesso.verifica_agendamento_usuario(_autenticacao cha
     language plpgsql
 as
 $$
-declare
-begin
-
     /**
       Verifica se existe um agendamento para o usuário no espaço informado
      */
-
+declare
+begin
     if (
-           SELECT count(*)
-           FROM acesso.reserva
-           WHERE upper(autenticacao) = upper(_autenticacao)
-             and equipamento = _equipamento
-             and inicio::date = current_date
-             and (current_timestamp between inicio and final + interval '5' minute) = true
-       ) = 0 THEN
+        select count(*)
+          from acesso.reserva
+         where upper(autenticacao) = upper(_autenticacao)
+           and equipamento = _equipamento
+           and inicio::date = current_date
+           and (current_timestamp between inicio and final + interval '5' minute) = true
+    ) = 0 then
         return false;
     end if;
-
     return true;
 end
 $$;
