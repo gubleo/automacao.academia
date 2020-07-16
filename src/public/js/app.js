@@ -17,11 +17,11 @@ class EndPoint {
         });
     };
 
-    Pesquisar(id) {
+    Adicionar() {
         return new Promise((resolve, reject) => {
             $.ajax({
-                type: 'GET',
-                url: window.location.origin + this.pesquisar + id,
+                type: 'POST',
+                url: window.endpoint + this.parametros.origem,
                 dataType: 'json',
                 headers: {
                     Prefer: 'return=representation',
@@ -29,7 +29,8 @@ class EndPoint {
                 },
                 success: function (response) {
                     resolve(response);
-                }
+                },
+                data: this.dados
             }).fail(function (jqXHR) {
                 reject(new Error(jqXHR.responseJSON.message));
             });
@@ -104,7 +105,7 @@ class Moradores extends EndPoint {
 
     constructor(params) {
         super();
-        this.listar = '/condominio/moradores?select=num,nome,autenticacao,filedate&unidade=eq.';
+        this.listar = '/condominio/moradores?select=num,nome,autenticacao,foto1&unidade=eq.';
 
         this.AbrirRecurso('html/listamoradores.html').then(value => {
             params.page.innerHTML = value.toString();
@@ -123,6 +124,7 @@ class Moradores extends EndPoint {
 
             let linha = modelo.content.cloneNode(true);
             linha.getElementById('nome').innerText = item.nome;
+            linha.getElementById('foto').style.backgroundImage = 'url("' + item.foto1 + '")';
             linha.getElementById('num').addEventListener('click', function () {
                 window.dispatchEvent(new CustomEvent('AoSelecionarMorador', {
                     detail: {
@@ -152,7 +154,7 @@ class Agendamentos extends EndPoint {
             let yyyy = today.getFullYear();
             let data = `${yyyy}-${mm}-${dd}`;
             this.ListaAgendamentos(data).then(agendamentos => {
-                this.Listar('autenticacao=eq.' + params.morador.autenticacao + '&data=eq.' + data).then(reservado => {
+                this.Listar('select=horario&autenticacao=eq.' + params.morador.autenticacao + '&data=eq.' + data).then(reservado => {
                     this.MontaAgendamentos(agendamentos, reservado);
                 });
             })
@@ -183,18 +185,9 @@ class Agendamentos extends EndPoint {
         let modelo = document.getElementById('tplagendamentos');
         let gridagendamentos = document.getElementById('gridagendamentos');
 
-        let today = new Date();
-        let dd = String(today.getDate()).padStart(2, '0');
-        let mm = String(today.getMonth() + 1).padStart(2, '0');
-        let yyyy = today.getFullYear();
-        let hour = today.getHours();
-        let mi = today.getMinutes();
-        let se = today.getSeconds();
-
-
         agendamentos.filter(function (item) {
 
-            if (item.hora <= hour)
+            if (item.hora <= new Date().getHours())
                 return;
 
             let linha = modelo.content.cloneNode(true);
@@ -208,7 +201,7 @@ class Agendamentos extends EndPoint {
                 hora.addEventListener('click', function () {
                     window.dispatchEvent(new CustomEvent('AoSelecionarHorario', {
                         detail: {
-                            horario: {hora: item.hora, reservado: reservado}
+                            horario: {selecionado: item.hora, reservas: reservado}
                         }
                     }));
                 });
@@ -222,13 +215,32 @@ class Agendamentos extends EndPoint {
         window.dispatchEvent(new CustomEvent('AoCaregarAgendamentos', {}));
     }
 
+    Reservar(dados) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                type: 'POST',
+                url: '/condominio/rpc/gymadd',
+                dataType: 'json',
+                headers: {
+                    Prefer: 'params=single-object',
+                    Accept: 'application/vnd.pgrst.object+json'
+                },
+                success: function (response) {
+                    resolve(response.gymadd);
+                }.bind(this),
+                data: dados
+            }).fail(function (jqXHR) {
+                reject(jqXHR.responseJSON.message);
+            });
+        })
+    }
+
 
 }
 
 (function () {
 
-    let unidade = null;
-    let morador = null;
+    let unidade = null, morador = null, agenda;
     let containeracesso = document.getElementById('acesso');
     let containermoradores = document.getElementById('moradores');
     let containeragendamentos = document.getElementById('agendamentos');
@@ -237,6 +249,21 @@ class Agendamentos extends EndPoint {
     this.Iniciar = function () {
         aguarde.style.display = 'block';
         new Moradores({page: containermoradores, unidade: unidade});
+    };
+
+    this.ConfirmaHorario = function (horario) {
+        let today = new Date();
+        let dd = String(today.getDate()).padStart(2, '0');
+        let mm = String(today.getMonth() + 1).padStart(2, '0');
+        let yyyy = today.getFullYear();
+        let data = `${yyyy}-${mm}-${dd}`;
+
+        agenda.Reservar({data: data, horario: horario, morador: morador.autenticacao}).then(value => {
+            alert(value);
+
+        }).catch(reason => {
+            alert(reason)
+        });
     };
 
     window.addEventListener('AntesdeLogar', function (e) {
@@ -262,7 +289,7 @@ class Agendamentos extends EndPoint {
         morador = e.detail.morador;
         containermoradores.style.display = 'none';
         aguarde.style.display = 'block';
-        new Agendamentos({page: containeragendamentos, unidade: unidade, morador: morador});
+        agenda = new Agendamentos({page: containeragendamentos, unidade: unidade, morador: morador});
     });
 
     window.addEventListener('AoCaregarAgendamentos', function () {
@@ -271,20 +298,14 @@ class Agendamentos extends EndPoint {
     });
 
     window.addEventListener('AoSelecionarHorario', function (e) {
-        containeragendamentos.style.display = 'none';
-        aguarde.style.display = 'block';
-
-        let today = new Date();
-        let dd = String(today.getDate()).padStart(2, '0');
-        let mm = String(today.getMonth() + 1).padStart(2, '0');
-        let yyyy = today.getFullYear();
-        let hour = today.getHours();
-        let mi = today.getMinutes();
-        let se = today.getSeconds();
-
-        console.debug(e.detail.horario);
-
-    });
+        if (e.detail.horario.reservas.length > 0) {
+            alert('Você ainda não concluiu a reserva anterior');
+        } else {
+            if (confirm('Você confirma a reserva para as ' + e.detail.horario.selecionado + 'hs?')) {
+                this.ConfirmaHorario(e.detail.horario.selecionado);
+            }
+        }
+    }.bind(this));
 
     if (sessionStorage.unidade === undefined) {
         new Acesso({page: containeracesso});
