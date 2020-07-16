@@ -1,3 +1,28 @@
 .hidden {
     display: none;
 }
+
+.linha {
+    border: 1px solid red;
+    cursor: pointer;
+    height: 32px;
+    line-height: 32px;
+}
+
+.agendamento {
+    cursor: pointer;
+    height: 32px;
+    width: 100%;
+    display: inline-block;
+    border: 1px solid red;
+}
+
+.reservado {
+    background-color: red;
+    color: #fff;
+}
+
+#aguarde {
+    background-color: red;
+    color: #fff;
+}

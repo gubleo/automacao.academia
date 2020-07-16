@@ -1,14 +1,5 @@
 class EndPoint {
     listar;
-    combo;
-    pesquisar;
-    adicionar;
-    editar;
-    remover;
-
-    constructor(props) {
-
-    }
 
     Listar(id) {
         return new Promise((resolve, reject) => {
@@ -26,28 +17,6 @@ class EndPoint {
         });
     };
 
-    // Obtem a lista de registros entre id e valor e devolve num array para ser utiizado num combo
-    Combo() {
-        return new Promise((resolve, reject) => {
-            $.ajax({
-                type: 'GET',
-                url: window.location.origin + this.combo,
-                dataType: 'json',
-                success: function (response) {
-                    let options = [];
-                    response.filter(function (item) {
-                        options.push({value: item.id, text: item.descricao})
-                    });
-                    resolve(options);
-                }
-            }).fail(function (jqXHR) {
-                this.ObtemErro(jqXHR);
-                reject();
-            }.bind(this));
-        });
-    };
-
-    // Pesquisa um registro utilizando o id da tabela
     Pesquisar(id) {
         return new Promise((resolve, reject) => {
             $.ajax({
@@ -62,78 +31,8 @@ class EndPoint {
                     resolve(response);
                 }
             }).fail(function (jqXHR) {
-                this.ObtemErro(jqXHR);
-                reject();
-            }.bind(this));
-        });
-    };
-
-    // Envia o registro para a tabela
-    Adicionar() {
-
-        return new Promise((resolve, reject) => {
-            $.ajax({
-                type: 'POST',
-                url: window.location.origin + this.adicionar,
-                dataType: 'json',
-                headers: {
-                    Prefer: 'return=representation',
-                    Accept: 'application/vnd.pgrst.object+json'
-                },
-                success: function (response) {
-                    resolve(response);
-                },
-                data: this.novodados
-            }).fail(function (jqXHR) {
-                this.ObtemErro(jqXHR);
-                reject();
-            }.bind(this));
-        });
-    };
-
-    // Altera o registro de uma tabela
-    Editar(id) {
-
-        return new Promise((resolve, reject) => {
-            $.ajax({
-                type: 'PATCH',
-                url: window.location.origin + this.editar + id,
-                dataType: 'json',
-                headers: {
-                    Prefer: 'return=representation',
-                    Accept: 'application/vnd.pgrst.object+json'
-                },
-                success: function (response) {
-                    this.novodados = undefined;
-                    resolve(response);
-                }.bind(this),
-                data: this.novodados
-            }).fail(function (jqXHR) {
-                this.ObtemErro(jqXHR);
-                reject();
-            }.bind(this));
-        });
-    };
-
-    // Remove o registro da tabela
-    Remover(id) {
-        return new Promise((resolve, reject) => {
-            $.ajax({
-                type: 'DELETE',
-                url: window.location.origin + this.remover + id,
-                dataType: 'json',
-                headers: {
-                    Prefer: 'return=representation',
-                    Accept: 'application/vnd.pgrst.object+json'
-                },
-                success: function (response) {
-                    resolve(response);
-                },
-                data: this.data
-            }).fail(function (jqXHR) {
-                this.ObtemErro(jqXHR);
-                reject();
-            }.bind(this));
+                reject(new Error(jqXHR.responseJSON.message));
+            });
         });
     };
 
@@ -159,32 +58,215 @@ class EndPoint {
     }
 }
 
-class App extends EndPoint {
+// Login usuário
+class Acesso extends EndPoint {
 
-    acesso;
-
-    constructor() {
+    constructor(params) {
         super();
-        
-        
-        this.acesso = document.getElementById('acesso');
-        if (sessionStorage.usuario === undefined) {
-            this.AbrirRecurso('html/acesso.html').then(value => {
-                this.acesso.innerHTML = value.toString();
-                document.getElementById('btnacesso').addEventListener('click', function () {
-                    let usuario = document.getElementById('usuario').value;
-                    let senha = document.getElementById('senha').value;
-                });
-                this.acesso.style.display = 'block';
-            });
-            return;
-        }
-        this.acesso.style.display = 'none';
-
+        this.AbrirRecurso('html/acesso.html').then(value => {
+            params.page.innerHTML = value.toString();
+            this.submeter = document.getElementById('btnacesso');
+            this.submeter.addEventListener('click', this.SolicitaLogin);
+            window.dispatchEvent(new CustomEvent('AoCaregarLoginPage', {}));
+        });
     }
 
+    SolicitaLogin() {
+
+        let usuario = document.getElementById('usuario');
+        let senha = document.getElementById('senha');
+
+        window.dispatchEvent(new CustomEvent('AntesdeLogar', {}));
+
+        $.ajax({
+            type: 'POST',
+            url: '/condominio/rpc/gymlogin',
+            dataType: 'json',
+            headers: {
+                Prefer: 'params=single-object',
+                Accept: 'application/vnd.pgrst.object+json'
+            },
+            success: function (response) {
+                window.dispatchEvent(new CustomEvent('AoLogar', {
+                    detail: {
+                        unidade: response.gymlogin
+                    }
+                }));
+            }.bind(this),
+            data: {usuario: usuario.value, pass: senha.value}
+        }).fail(function (jqXHR) {
+            console.error(jqXHR);
+        });
+    }
+}
+
+class Moradores extends EndPoint {
+
+    constructor(params) {
+        super();
+        this.listar = '/condominio/moradores?select=num,nome,autenticacao,filedate&unidade=eq.';
+
+        this.AbrirRecurso('html/listamoradores.html').then(value => {
+            params.page.innerHTML = value.toString();
+            this.Listar(params.unidade).then(value => {
+                this.MontaListView(value);
+            });
+        });
+    }
+
+    MontaListView(lista) {
+
+        let modelo = document.getElementById('tplmoradores');
+        let gridmoradores = document.getElementById('gridmoradores');
+
+        lista.filter(function (item) {
+
+            let linha = modelo.content.cloneNode(true);
+            linha.getElementById('nome').innerText = item.nome;
+            linha.getElementById('num').addEventListener('click', function () {
+                window.dispatchEvent(new CustomEvent('AoSelecionarMorador', {
+                    detail: {
+                        morador: item
+                    }
+                }));
+            });
+            gridmoradores.appendChild(linha);
+
+        });
+
+        window.dispatchEvent(new CustomEvent('AoCaregarMoradores', {}));
+    }
+}
+
+class Agendamentos extends EndPoint {
+
+    constructor(params) {
+        super();
+        this.listar = '/condominio/gymlist?';
+        this.AbrirRecurso('html/listaagenda.html').then(value => {
+            params.page.innerHTML = value.toString();
+
+            let today = new Date();
+            let dd = String(today.getDate()).padStart(2, '0');
+            let mm = String(today.getMonth() + 1).padStart(2, '0');
+            let yyyy = today.getFullYear();
+            let data = `${yyyy}-${mm}-${dd}`;
+            this.ListaAgendamentos(data).then(agendamentos => {
+                this.Listar('autenticacao=eq.' + params.morador.autenticacao + '&data=eq.' + data).then(reservado => {
+                    this.MontaAgendamentos(agendamentos, reservado);
+                });
+            })
+        });
+    }
+
+    ListaAgendamentos(data) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                type: 'POST',
+                url: '/condominio/rpc/gymlist',
+                dataType: 'json',
+                headers: {
+                    Prefer: 'params=single-object',
+                },
+                success: function (response) {
+                    resolve(response);
+                }.bind(this),
+                data: {data: data}
+            }).fail(function (jqXHR) {
+                reject(jqXHR);
+            });
+        })
+    }
+
+    MontaAgendamentos(agendamentos, reservado) {
+
+        let modelo = document.getElementById('tplagendamentos');
+        let gridagendamentos = document.getElementById('gridagendamentos');
+
+        agendamentos.filter(function (item) {
+
+            let linha = modelo.content.cloneNode(true);
+            linha.getElementById('horario').innerText = item.hora;
+            linha.getElementById('situacao').innerText = item.situacao;
+            let hora = linha.getElementById('hora');
+            hora.id = item.hora;
+
+            let reserva = reservado.find(x=>x.horario === item.hora);
+            if (reserva === undefined) {
+                hora.addEventListener('click', function () {
+                    window.dispatchEvent(new CustomEvent('AoSelecionarHorario', {
+                        detail: {
+                            horario: item
+                        }
+                    }));
+                });
+            } else {
+                hora.className = 'reservado';
+            }
+            gridagendamentos.appendChild(linha);
+        });
+
+        window.dispatchEvent(new CustomEvent('AoCaregarAgendamentos', {}));
+    }
 
 
 }
 
-new App();
+(function () {
+
+    let unidade = null;
+    let morador = null;
+    let containeracesso = document.getElementById('acesso');
+    let containermoradores = document.getElementById('moradores');
+    let containeragendamentos = document.getElementById('agendamentos');
+    let aguarde = document.getElementById('aguarde');
+
+    this.Iniciar = function () {
+        aguarde.style.display = 'block';
+        new Moradores({page: containermoradores, unidade: unidade});
+    };
+
+    window.addEventListener('AntesdeLogar', function (e) {
+    }.bind(this));
+
+    window.addEventListener('AoLogar', function (e) {
+        unidade = e.detail.unidade;
+        sessionStorage.unidade = JSON.stringify(unidade);
+        containeracesso.style.display = 'none';
+        this.Iniciar();
+    }.bind(this));
+
+    window.addEventListener('AoCaregarLoginPage', function () {
+        containeracesso.style.display = 'block';
+    }.bind(this));
+
+    window.addEventListener('AoCaregarMoradores', function () {
+        containermoradores.style.display = 'block';
+        aguarde.style.display = 'none';
+    });
+
+    window.addEventListener('AoSelecionarMorador', function (e) {
+        morador = e.detail.morador;
+        containermoradores.style.display = 'none';
+        aguarde.style.display = 'block';
+        new Agendamentos({page: containeragendamentos, unidade: unidade, morador: morador});
+    });
+
+    window.addEventListener('AoCaregarAgendamentos', function () {
+        containeragendamentos.style.display = 'block';
+        aguarde.style.display = 'none';
+    });
+
+    window.addEventListener('AoSelecionarHorario', function (e) {
+        containeragendamentos.style.display = 'none';
+        aguarde.style.display = 'block';
+    });
+
+    if (sessionStorage.unidade === undefined) {
+        new Acesso({page: containeracesso});
+    } else {
+        unidade = sessionStorage.unidade;
+        this.Iniciar();
+    }
+
+})();
