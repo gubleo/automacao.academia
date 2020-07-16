@@ -15,3 +15,12 @@
 body{
     border-top: solid 2px orangered;
 }
+
+.hidden {
+    display: none;
+}
+
+.reservado {
+    background-color: red;
+    color: white;
+}
