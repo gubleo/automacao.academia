@@ -194,25 +194,25 @@ class Agendamentos extends EndPoint {
 
         agendamentos.filter(function (item) {
 
+            if (item.hora <= hour)
+                return;
+
             let linha = modelo.content.cloneNode(true);
             linha.getElementById('horario').innerText = item.hora;
             linha.getElementById('situacao').innerText = item.situacao;
             let hora = linha.getElementById('hora');
             hora.id = item.hora;
 
-            let reserva = reservado.find(x=>x.horario === item.hora);
+            let reserva = reservado.find(x => x.horario === item.hora);
             if (reserva === undefined) {
-                if (item.hora <= hour) {
-                    hora.className = 'horariopassado';
-                } else {
-                    hora.addEventListener('click', function () {
-                        window.dispatchEvent(new CustomEvent('AoSelecionarHorario', {
-                            detail: {
-                                horario: {hora: item.hora, reservado: reservado}
-                            }
-                        }));
-                    });
-                }
+                hora.addEventListener('click', function () {
+                    window.dispatchEvent(new CustomEvent('AoSelecionarHorario', {
+                        detail: {
+                            horario: {hora: item.hora, reservado: reservado}
+                        }
+                    }));
+                });
+
             } else {
                 hora.className = 'reservado';
             }
