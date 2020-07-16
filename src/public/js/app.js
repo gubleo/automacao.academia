@@ -183,6 +183,15 @@ class Agendamentos extends EndPoint {
         let modelo = document.getElementById('tplagendamentos');
         let gridagendamentos = document.getElementById('gridagendamentos');
 
+        let today = new Date();
+        let dd = String(today.getDate()).padStart(2, '0');
+        let mm = String(today.getMonth() + 1).padStart(2, '0');
+        let yyyy = today.getFullYear();
+        let hour = today.getHours();
+        let mi = today.getMinutes();
+        let se = today.getSeconds();
+
+
         agendamentos.filter(function (item) {
 
             let linha = modelo.content.cloneNode(true);
@@ -193,13 +202,17 @@ class Agendamentos extends EndPoint {
 
             let reserva = reservado.find(x=>x.horario === item.hora);
             if (reserva === undefined) {
-                hora.addEventListener('click', function () {
-                    window.dispatchEvent(new CustomEvent('AoSelecionarHorario', {
-                        detail: {
-                            horario: item
-                        }
-                    }));
-                });
+                if (item.hora <= hour) {
+                    hora.className = 'horariopassado';
+                } else {
+                    hora.addEventListener('click', function () {
+                        window.dispatchEvent(new CustomEvent('AoSelecionarHorario', {
+                            detail: {
+                                horario: {hora: item.hora, reservado: reservado}
+                            }
+                        }));
+                    });
+                }
             } else {
                 hora.className = 'reservado';
             }
@@ -260,6 +273,17 @@ class Agendamentos extends EndPoint {
     window.addEventListener('AoSelecionarHorario', function (e) {
         containeragendamentos.style.display = 'none';
         aguarde.style.display = 'block';
+
+        let today = new Date();
+        let dd = String(today.getDate()).padStart(2, '0');
+        let mm = String(today.getMonth() + 1).padStart(2, '0');
+        let yyyy = today.getFullYear();
+        let hour = today.getHours();
+        let mi = today.getMinutes();
+        let se = today.getSeconds();
+
+        console.debug(e.detail.horario);
+
     });
 
     if (sessionStorage.unidade === undefined) {

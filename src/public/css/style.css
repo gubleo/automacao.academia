@@ -22,6 +22,12 @@
     color: #fff;
 }
 
+.horariopassado {
+    background-color: gray;
+    color: #fff;
+    border: 1px solid red;
+}
+
 #aguarde {
     background-color: red;
     color: #fff;
