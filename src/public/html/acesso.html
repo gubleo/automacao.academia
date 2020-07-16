@@ -1,10 +1,36 @@
 <!DOCTYPE html>
 <html lang="pt">
 <body>
-<form action="#!" id="formlogin">
-    <input type="text" id="usuario"><br>
-    <input type="password" id="senha"><br>
-    <button type="submit" id="btnacesso">Login</button>
+
+<!-- Default form login -->
+<form class="text-center mt-5" id="formlogin" action="#!">
+
+    <img class="logo mb-4" src="img/anima.png"/>
+
+    <!-- Email -->
+    <input type="email" id="usuario" class="form-control mb-4" placeholder="Usuário">
+
+    <!-- Password -->
+    <input type="password" id="senha" class="form-control mb-4" placeholder="Senha">
+
+    <div class="d-flex justify-content-around">
+        <div>
+            <!-- Remember me -->
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="defaultLoginFormRemember">
+                <label class="custom-control-label" for="defaultLoginFormRemember">Lembrar-me</label>
+            </div>
+        </div>
+        <div>
+            <!-- Forgot password -->
+            <a href="">Esqueceu a senha?</a>
+        </div>
+    </div>
+
+    <!-- Sign in button -->
+    <button class="btn btn-info btn-block my-4" id="btnacesso" type="submit">Entrar</button>
 </form>
+<!-- Default form login -->
+
 </body>
 </html>
