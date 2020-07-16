@@ -79,3 +79,8 @@ fabric.properties
 *.iml
 out
 gen
+.DS_Store
+res/
+src/.DS_Store
+src/public/.DS_Store
+test/
