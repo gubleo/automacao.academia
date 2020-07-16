@@ -5,13 +5,43 @@
     <title></title>
 </head>
 <body>
+<h5 class="mt-5">Horários disponíveis</h5>
+<span class="text-muted font-small mb-3">Consulte os horários disponíveis para o uso do espaço. </span>
+<div class="container">
+
+
+
     <template id="tplagendamentos">
-        <div id="hora" class="agendamento">
-            <div id="horario"></div>
-            <div id="situacao"></div>
+
+        <!-- Small news -->
+        <div class="single-news mt-3 ">
+
+            <!-- Grid row -->
+            <div class="row">
+
+                <!-- Grid column -->
+                <div class="col-md-9 agendamentos border-bottom-reservas hoverable waves-effect" id="hora">
+
+                    <!-- Excerpt -->
+                    <p class="font-weight-bold dark-grey-text" id="horario">s</p>
+                    <div class="d-flex justify-content-between">
+                        <div class="col-11 text-truncate pl-0 mb-3">
+                            <a href="#!" class="dark-grey-text" id="situacao"></a>
+                        </div>
+                        <a><i class="fas fa-angle-double-right light-grey"></i></a>
+                    </div>
+
+                </div>
+                <!-- Grid column -->
+
+            </div>
+            <!-- Grid row -->
+
         </div>
+        <!-- Small news -->
+
     </template>
-    <h3>Horários disponíveis</h3>
     <div id="gridagendamentos"></div>
+</div>
 </body>
 </html>

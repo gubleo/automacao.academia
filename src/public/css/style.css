@@ -1,34 +1,13 @@
-.hidden {
-    display: none;
+.border-bottom2{
+    border-left: solid 2px orangered;
+    border-bottom: solid 1px rgba(211, 211, 211, 0.19);
 }
 
-.linha {
-    border: 1px solid red;
-    cursor: pointer;
-    height: 32px;
-    line-height: 32px;
+.light-grey{
+    color: rgba(211, 211, 211, 0.45);
 }
 
-.agendamento {
-    cursor: pointer;
-    height: 32px;
-    width: 100%;
-    display: inline-block;
-    border: 1px solid red;
-}
-
-.reservado {
-    background-color: red;
-    color: #fff;
-}
-
-.horariopassado {
-    background-color: gray;
-    color: #fff;
-    border: 1px solid red;
-}
-
-#aguarde {
-    background-color: red;
-    color: #fff;
+.border-bottom-reservas{
+    border-left: solid 2px lawngreen;
+    border-bottom: solid 1px rgba(211, 211, 211, 0.19);
 }
