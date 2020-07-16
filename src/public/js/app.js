@@ -143,7 +143,9 @@ class Moradores extends EndPoint {
 class Agendamentos extends EndPoint {
 
     constructor(params) {
+
         super();
+        this.params = params;
         this.listar = '/condominio/gymlist?';
         this.AbrirRecurso('html/listaagenda.html').then(value => {
             params.page.innerHTML = value.toString();
@@ -199,18 +201,29 @@ class Agendamentos extends EndPoint {
             let reserva = reservado.find(x => x.horario === item.hora);
             if (reserva === undefined) {
                 hora.addEventListener('click', function () {
-                    window.dispatchEvent(new CustomEvent('AoSelecionarHorario', {
-                        detail: {
-                            horario: {selecionado: item.hora, reservas: reservado}
-                        }
-                    }));
-                });
+
+                    let today = new Date();
+                    let dd = String(today.getDate()).padStart(2, '0');
+                    let mm = String(today.getMonth() + 1).padStart(2, '0');
+                    let yyyy = today.getFullYear();
+                    let data = `${yyyy}-${mm}-${dd}`;
+
+                    this.Listar('select=horario&autenticacao=eq.' + this.params.morador.autenticacao + '&data=eq.' + data + '&horario=gt.'+ today.getHours()).then(reservado => {
+                        window.dispatchEvent(new CustomEvent('AoSelecionarHorario', {
+                            detail: {
+                                horario: {selecionado: item.hora, reservas: reservado}
+                            }
+                        }));
+                    });
+
+
+                }.bind(this));
 
             } else {
                 hora.className = 'reservado';
             }
             gridagendamentos.appendChild(linha);
-        });
+        }.bind(this));
 
         window.dispatchEvent(new CustomEvent('AoCaregarAgendamentos', {}));
     }
@@ -244,6 +257,7 @@ class Agendamentos extends EndPoint {
     let containeracesso = document.getElementById('acesso');
     let containermoradores = document.getElementById('moradores');
     let containeragendamentos = document.getElementById('agendamentos');
+    let finaliza = document.getElementById('finaliza');
     let aguarde = document.getElementById('aguarde');
 
     this.Iniciar = function () {
@@ -259,8 +273,12 @@ class Agendamentos extends EndPoint {
         let data = `${yyyy}-${mm}-${dd}`;
 
         agenda.Reservar({data: data, horario: horario, morador: morador.autenticacao}).then(value => {
-            alert(value);
-
+            new EndPoint().AbrirRecurso('html/finaliza.html').then(finalizapage => {
+                finaliza.innerHTML = finalizapage.toString();
+                containeragendamentos.style.display = 'none';
+                finaliza.style.display = 'block';
+                sessionStorage.clear();
+            });
         }).catch(reason => {
             alert(reason)
         });
