@@ -196,7 +196,7 @@
 
         constructor(params) {
             super();
-            this.listar = '/condominio/moradores?select=num,nome,autenticacao,foto1&unidade=eq.';
+            this.listar = '/condominio/moradores?select=num,nome,autenticacao,foto1&autenticacao=not.eq.null&unidade=eq.';
 
             this.AbrirRecurso('html/listamoradores.html').then(value => {
                 params.page.innerHTML = value.toString();
@@ -298,6 +298,7 @@
                     finaliza.innerHTML = finalizapage.toString();
                     containeragendamentos.style.display = 'none';
                     finaliza.style.display = 'block';
+                    sessionStorage.clear();
                 });
             }).catch(reason => {
                 alert(reason)
