@@ -5,29 +5,25 @@
     <title>Title</title>
 </head>
 <body>
-<h5 class="mt-5">Moradores da Unidade</h5>
-<span class="text-muted font-small mb-3">Selecione qual morador irá fazer o agendamento no espaço.</span>
-
+<h4 class="mt-4 black-text">Moradores da Unidade</h4>
+<span class="font-small mb-3">Selecione qual morador irá fazer o agendamento no espaço.</span>
 
     <template id="tplmoradores">
-
-        <div>
-                <div id="num" class="row mt-3 p-3 m-1 pointer-event waves-effect border-bottom2 z-depth-0">
-                    <div class="col-2 col-md-1">
+            <div>
+                <div id="num" class="row mt-3 p-3 pointer-event waves-effect border-bottom2 z-depth-0">
+                    <div class="col-2 col-md-1 mr-2" style="margin-left: -15px;">
                         <div id="foto" class="avatar"></div>
                     </div>
                     <div class="col-10 col-md-11">
                         <div class="d-flex w-100 justify-content-between">
-                            <span id="nome" class="mb-2"> </span>
+                            <span id="nome" class="mb-2 mt-3"> </span>
                             <div id="filedate"></div>
                             <i class="fa fa-chevron-right float-right light-grey ml-3" aria-hidden="true"></i>
-
                         </div>
                     </div>
                 </div>
-        </div>
+             </div>
     </template>
-
 
     <div id="gridmoradores"></div>
 
