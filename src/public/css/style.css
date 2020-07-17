@@ -3,6 +3,11 @@
     border-bottom: solid 1px rgba(211, 211, 211, 0.19);
 }
 
+.border-bottom-reservado{
+    border-left: solid 2px deepskyblue;
+    border-bottom: solid 1px rgba(211, 211, 211, 0.19);
+}
+
 .light-grey{
     color: rgba(211, 211, 211, 0.45);
 }

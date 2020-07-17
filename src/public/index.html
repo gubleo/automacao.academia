@@ -134,6 +134,8 @@
                     return;
 
                 let linha = modelo.content.cloneNode(true);
+
+                linha.getElementById('check').className = 'fas fa-angle-double-right light-grey';
                 linha.getElementById('horario').innerText = item.hora;
                 linha.getElementById('situacao').innerText = item.situacao;
                 let hora = linha.getElementById('hora');
@@ -161,7 +163,8 @@
                     }.bind(this));
 
                 } else {
-                    hora.className = 'reservado';
+                   hora.className = 'col-md-9 agendamentos border-bottom-reservado';
+                   linha.getElementById('check').className = 'fas fa-check-double blue-text';
                 }
                 gridagendamentos.appendChild(linha);
             }.bind(this));
@@ -214,8 +217,11 @@
             lista.filter(function (item) {
 
                 let linha = modelo.content.cloneNode(true);
-                linha.getElementById('nome').innerText = item.nome;
-                linha.getElementById('foto').style.backgroundImage = 'url("' + item.foto1 + '")';
+                linha.getElementById('nome').innerText = item.nome.split(' ')[0].initCap();
+
+                if (item.foto1 !== null)
+                    linha.getElementById('foto').style.backgroundImage = 'url("' + item.foto1 + '")';
+
                 linha.getElementById('num').addEventListener('click', function () {
                     window.dispatchEvent(new CustomEvent('AoSelecionarMorador', {
                         detail: {
@@ -354,6 +360,13 @@
         }
 
     };
+
+    String.prototype.initCap = function () {
+        return this.toLowerCase().replace(/(?:^|\s)[a-z]/g, function (m) {
+            return m.toUpperCase();
+        });
+    };
+
     new gym();
 </script>
 </html>
