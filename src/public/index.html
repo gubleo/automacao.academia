@@ -27,34 +27,22 @@
             <div class="col-4"></div>
         </div>
     </div>
-    </div>
-</div>
-
-<!-- Frame Modal Bottom -->
-<div class="modal fade bottom" id="frameModalBottom" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-     aria-hidden="true">
-
-    <!-- Add class .modal-frame and then add class .modal-bottom (or other classes from list above) to set a position to the modal -->
-    <div class="modal-dialog modal-frame modal-bottom" role="document">
-
-
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="row d-flex justify-content-center align-items-center">
-
-                    <p class="pt-3 pr-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Impedit nisi quo
-                        provident fugiat reprehenderit nostrum
-                        quos..
-                    </p>
-
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+    <div class="modal fade bottom" id="modal-confirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-frame modal-bottom" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row d-flex justify-content-center align-items-center">
+                        <p class="pt-3 pr-2">Você confirma a reserva para este horário?</p>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button id="btnconfirmar" type="button" class="btn btn-primary" data-dismiss="modal">Confirmar</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    </div>
 </div>
-<!-- Frame Modal Bottom -->
+
 
 </body>
 <script type="text/javascript" src="js/jquery.js"></script>
@@ -165,8 +153,10 @@
                 linha.getElementById('check').className = 'fas fa-angle-double-right light-grey';
                 linha.getElementById('horario').innerText = item.hora;
                 linha.getElementById('situacao').innerText = item.situacao;
+
                 let hora = linha.getElementById('hora');
                 hora.id = item.hora;
+
 
                 let reserva = reservado.find(x => x.horario === item.hora);
                 if (reserva === undefined) {
@@ -178,7 +168,8 @@
                         let yyyy = today.getFullYear();
                         let data = `${yyyy}-${mm}-${dd}`;
 
-                        this.Listar('select=horario&autenticacao=eq.' + this.params.morador.autenticacao + '&data=eq.' + data + '&horario=gt.'+ today.getHours()).then(reservado => {
+                        this.Listar('select=horario&autenticacao=eq.' + this.params.morador.autenticacao +
+                            '&data=eq.' + data + '&horario=gt.'+ today.getHours()).then(reservado => {
                             window.dispatchEvent(new CustomEvent('AoSelecionarHorario', {
                                 detail: {
                                     horario: {selecionado: item.hora, reservas: reservado}
@@ -311,6 +302,7 @@
         let containeracesso = document.getElementById('acesso');
         let containermoradores = document.getElementById('moradores');
         let containeragendamentos = document.getElementById('agendamentos');
+        let btnconfirmar = document.getElementById('btnconfirmar');
         let finaliza = document.getElementById('finaliza');
         let aguarde = document.getElementById('aguarde');
 
@@ -337,6 +329,10 @@
                 alert(reason)
             });
         };
+
+        btnconfirmar.addEventListener('click', function () {
+            this.ConfirmaHorario(this.horariodefinido);
+        }.bind(this));
 
         window.addEventListener('AntesdeLogar', function (e) {
         }.bind(this));
@@ -370,12 +366,9 @@
         });
 
         window.addEventListener('AoSelecionarHorario', function (e) {
+            this.horariodefinido = e.detail.horario.selecionado;
             if (e.detail.horario.reservas.length > 0) {
                 alert('Você ainda não concluiu a reserva anterior');
-            } else {
-                if (confirm('Você confirma a reserva para as ' + e.detail.horario.selecionado + 'hs?')) {
-                    this.ConfirmaHorario(e.detail.horario.selecionado);
-                }
             }
         }.bind(this));
 
