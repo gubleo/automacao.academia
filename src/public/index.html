@@ -322,7 +322,7 @@
                 new EndPoint().AbrirRecurso('html/finaliza.html').then(finalizapage => {
                     finaliza.innerHTML = finalizapage.toString();
                     document.getElementById('morador').innerText = morador.nome.split(' ')[0].initCap();
-                    document.getElementById('data').innerText = `${dd}-${mm}-${yyyy}`;
+                    document.getElementById('data').innerText = `${dd}/${mm}/${yyyy}`;
                     document.getElementById('horario').innerText = horario;
                     containeragendamentos.style.display = 'none';
                     finaliza.style.display = 'block';
