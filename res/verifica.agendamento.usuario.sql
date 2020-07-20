@@ -9,11 +9,13 @@ declare
 begin
     if (
         select count(*)
-          from acesso.reserva
-         where upper(autenticacao) = upper(_autenticacao)
-           and equipamento = _equipamento
-           and inicio::date = current_date
-           and (current_timestamp between inicio and final + interval '5' minute) = true
+        from acesso.reserva_academia
+        where upper(autenticacao) = upper('1EBC5')
+          and data = current_date
+          and (horario || ':00:00')::time
+              between
+                to_char(current_timestamp, 'HH24:00:00')::time
+                and to_char((current_timestamp + interval '5' minute), 'HH24:MI:ss')::time
     ) = 0 then
         return false;
     end if;
