@@ -201,6 +201,9 @@ class Moradores extends EndPoint {
                         }
                     }));
                 });
+            } else {
+                linha.getElementById('num').className = 'row mt-3 p-3 border-bottom2 naopermitido';
+                linha.getElementById('iconemorador').className = '';
             }
 
             gridmoradores.appendChild(linha);
@@ -227,6 +230,7 @@ class Acesso extends EndPoint {
 
         let usuario = document.getElementById('usuario');
         let senha = document.getElementById('senha');
+
 
         window.dispatchEvent(new CustomEvent('AntesdeLogar', {}));
 
