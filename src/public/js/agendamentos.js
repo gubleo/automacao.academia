@@ -14,7 +14,7 @@ class Agendamentos extends EndPoint {
             let yyyy = today.getFullYear();
             let data = `${yyyy}-${mm}-${dd}`;
             this.ListaAgendamentos(data).then(agendamentos => {
-                this.Listar('select=horario&autenticacao=eq.' + params.morador.autenticacao + '&data=eq.' + data).then(reservado => {
+                this.Listar('select=id,horario&autenticacao=eq.' + params.morador.autenticacao + '&data=eq.' + data).then(reservado => {
                     this.MontaAgendamentos(agendamentos, reservado);
                 });
             })
@@ -53,8 +53,7 @@ class Agendamentos extends EndPoint {
             let linha = modelo.content.cloneNode(true);
 
             linha.getElementById('check').className = 'fas fa-angle-double-right light-grey';
-            linha.getElementById('horario').innerText = item.hora;
-            linha.getElementById('situacao').innerText = item.situacao;
+            linha.getElementById('horario').innerText = item.hora + ':00 as '+ item.hora +':59 horas';
 
             let hora = linha.getElementById('hora');
             hora.id = item.hora;
@@ -62,6 +61,8 @@ class Agendamentos extends EndPoint {
 
             let reserva = reservado.find(x => x.horario === item.hora);
             if (reserva === undefined) {
+
+                linha.getElementById('situacao').innerText = item.situacao;
                 hora.addEventListener('click', function () {
 
                     let today = new Date();
@@ -86,7 +87,11 @@ class Agendamentos extends EndPoint {
                 let cancelar = linha.getElementById('cancelar-reserva');
                     cancelar.style.display = 'block';
                     cancelar.addEventListener('click', function () {
-                        alert('cancelado');
+                        window.dispatchEvent(new CustomEvent('AoSolicitarCancelamento', {
+                            detail: {
+                                horario: {id: reserva}
+                            }
+                        }));
                     });
                 linha.getElementById('hora-reservado').className = 'col-md-9 agendamentos border-bottom-reservado';
                 linha.getElementById('check').className = 'fas fa-check-double blue-text';
@@ -114,7 +119,27 @@ class Agendamentos extends EndPoint {
             }).fail(function (jqXHR) {
                 reject(jqXHR.responseJSON.message);
             });
-        })
+        });
+    }
+
+    CancelaReserva(id) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                type: 'POST',
+                url: '/condominio/rpc/gymdel',
+                dataType: 'json',
+                headers: {
+                    Prefer: 'params=single-object',
+                    Accept: 'application/vnd.pgrst.object+json'
+                },
+                success: function (response) {
+                    resolve(response.gymdel);
+                }.bind(this),
+                data: {x: 0, id: id, cmd:'del'}
+            }).fail(function (jqXHR) {
+                reject(jqXHR.responseJSON.message);
+            });
+        });
     }
 
 
