@@ -89,7 +89,7 @@ class Agendamentos extends EndPoint {
                     cancelar.addEventListener('click', function () {
                         window.dispatchEvent(new CustomEvent('AoSolicitarCancelamento', {
                             detail: {
-                                horario: reserva.id
+                                id: reserva.id
                             }
                         }));
                     });
