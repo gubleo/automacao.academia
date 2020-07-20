@@ -95,7 +95,7 @@ class Agendamentos extends EndPoint {
                     });
                 linha.getElementById('hora-reservado').className = 'col-md-9 agendamentos border-bottom-reservado';
                 linha.getElementById('check').className = 'fas fa-check-double blue-text';
-                linha.getElementById('badge-reservado').className = 'badge badge-primary float-right'
+                linha.getElementById('badge-reservado').className = 'badge badge-primary float-right';
             }
             gridagendamentos.appendChild(linha);
         }.bind(this));
