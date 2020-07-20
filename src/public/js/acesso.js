@@ -12,8 +12,20 @@ class Acesso extends EndPoint {
 
     SolicitaLogin() {
 
-        let usuario = document.getElementById('usuario');
-        let senha = document.getElementById('senha');
+        let usuario = document.getElementById('usuario').value;
+        let senha = document.getElementById('senha').value;
+
+        let message = new window.messages();
+
+        if (usuario === null || usuario.length < 5) {
+            message.alert('Atenção', 'Informe corretamente o seu nome de usuário e senha');
+            return;
+        }
+
+        if (senha === null || senha.length < 5) {
+            message.alert('Atenção', 'Informe corretamente a senha de acesso');
+            return;
+        }
 
         window.dispatchEvent(new CustomEvent('AntesdeLogar', {}));
 
@@ -32,8 +44,9 @@ class Acesso extends EndPoint {
                     }
                 }));
             }.bind(this),
-            data: {usuario: usuario.value, pass: senha.value}
+            data: {usuario: usuario, pass: senha}
         }).fail(function (jqXHR) {
+            message.alert('Atenção', jqXHR.responseJSON.message);
             console.error(jqXHR);
         });
     }
