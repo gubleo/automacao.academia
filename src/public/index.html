@@ -14,35 +14,35 @@
 
 </head>
 <body>
-<div class="container">
-    <div class="col-md-auto">
-    <div id="acesso" class="hidden form-text"></div>
-    <div id="moradores" class="hidden"></div>
-    <div id="agendamentos" class="hidden"></div>
-    <div id="finaliza" class="hidden"></div>
-    <div id="aguarde" class="hidden">
-        <div class="row">
-            <div class="col-4"></div>
-            <div class="col-4"><img alt="" class="ml-4" src="img/loading.gif"/></div>
-            <div class="col-4"></div>
+    <div class="container">
+        <div class="col-md-auto">
+            <div id="acesso" class="hidden form-text"></div>
+            <div id="moradores" class="hidden"></div>
+            <div id="agendamentos" class="hidden"></div>
+            <div id="finaliza" class="hidden"></div>
+            <div id="aguarde" class="hidden">
+                <img alt="" class="center" src="img/loading.gif"/>
+            </div>
         </div>
     </div>
-    <div class="modal fade bottom" id="modal-confirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-frame modal-bottom" role="document">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div class="row d-flex justify-content-center align-items-center">
-                        <p class="pt-3 pr-2">Você confirma a reserva para este horário?</p>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <button id="btnconfirmar" type="button" class="btn btn-primary" data-dismiss="modal">Confirmar</button>
+    <div id="materialModal" class="hide">
+        <div id="materialModalCentered">
+            <div id="materialModalContent">
+                <div id="materialModalTitle">
+                </div>
+                <div id="materialModalText">
+                </div>
+                <div id="materialModalButtons">
+                    <div id="materialModalButtonOK" class="materialModalButton">
+                        Ok
+                    </div>
+                    <div id="materialModalButtonCANCEL" class="materialModalButton">
+                        Cancelar
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    </div>
-</div>
-
 
 </body>
 <script type="text/javascript" src="js/jquery.js"></script>
@@ -304,11 +304,13 @@
 
     let gym = function() {
 
+        let messages = new window.messages();
+
         let unidade = null, morador = null, agenda;
         let containeracesso = document.getElementById('acesso');
         let containermoradores = document.getElementById('moradores');
         let containeragendamentos = document.getElementById('agendamentos');
-        let btnconfirmar = document.getElementById('btnconfirmar');
+        //let btnconfirmar = document.getElementById('btnconfirmar');
         let finaliza = document.getElementById('finaliza');
         let aguarde = document.getElementById('aguarde');
 
@@ -335,13 +337,11 @@
                     sessionStorage.clear();
                 });
             }).catch(reason => {
-                alert(reason)
+                messages.alert('Atenção', reason, function (result) {
+                    console.log(result);
+                });
             });
         };
-
-        btnconfirmar.addEventListener('click', function () {
-            this.ConfirmaHorario(this.horariodefinido);
-        }.bind(this));
 
         window.addEventListener('AntesdeLogar', function (e) {
         }.bind(this));
@@ -377,7 +377,15 @@
         window.addEventListener('AoSelecionarHorario', function (e) {
             this.horariodefinido = e.detail.horario.selecionado;
             if (e.detail.horario.reservas.length > 0) {
-                alert('Você ainda não concluiu a reserva anterior');
+                messages.alert('Atenção', 'Você ainda não concluiu a reserva anterior', function (result) {
+                    console.log(result);
+                });
+            } else {
+                messages.materialConfirm('Atenção', 'Você confirma a reserva para as ' + e.detail.horario.selecionado + 'hs?', function (result) {
+                    if (result === true) {
+                        this.ConfirmaHorario(e.detail.horario.selecionado);
+                    }
+                }.bind(this));
             }
         }.bind(this));
 
@@ -394,6 +402,50 @@
         return this.toLowerCase().replace(/(?:^|\s)[a-z]/g, function (m) {
             return m.toUpperCase();
         });
+    };
+
+    window.messages = function() {
+
+        let materialCallback = null;
+        this.alert = function(title, text, callback ){
+            document.getElementById('materialModalTitle').innerHTML = title;
+            document.getElementById('materialModalText').innerHTML = text;
+            document.getElementById('materialModalButtonCANCEL').style.display = 'none';
+
+            let materialModal = document.getElementById('materialModal');
+            materialModal.className = 'show';
+            materialModal.onclick = function() {
+                this.closeMaterialAlert(event, false);
+            }.bind(this);
+
+            let materialModalContent = document.getElementById('materialModalContent');
+            materialModalContent.onclick = function() {
+                event.stopPropagation();
+            }.bind(this);
+
+            let materialModalButtonOK = document.getElementById('materialModalButtonOK');
+            materialModalButtonOK.onclick = function() {
+                this.closeMaterialAlert(event, true);
+            }.bind(this);
+
+            let materialModalButtonCANCEL = document.getElementById('materialModalButtonCANCEL');
+            materialModalButtonCANCEL.onclick = function() {
+                this.closeMaterialAlert(event, false);
+            }.bind(this);
+
+            materialCallback = callback;
+        }.bind(this);
+
+        this.materialConfirm = function( title, text, callback ){
+            this.alert( title, text, callback );
+            document.getElementById('materialModalButtonCANCEL').style.display = 'block';
+        }.bind(this);
+
+        this.closeMaterialAlert = function(e, result){
+            e.stopPropagation();
+            document.getElementById('materialModal').className = 'hide';
+            if(typeof materialCallback === 'function') materialCallback(result);
+        };
     };
 
     new gym();
