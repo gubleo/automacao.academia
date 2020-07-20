@@ -1,11 +1,3 @@
-
-
-
-
-
-
-
-
 let gym = function() {
 
     let messages = new window.messages();
@@ -92,6 +84,22 @@ let gym = function() {
             }.bind(this));
         }
     }.bind(this));
+
+    window.addEventListener('AoSolicitarCancelamento', function (e) {
+        messages.materialConfirm('Atenção', 'Você confirma o cancelamento desta reserva?', function (result) {
+            if (result === true) {
+                console.debug(e.detail);
+                agenda.CancelaReserva(e.detail.horario.id).then(value => {
+                    console.debug(value);
+                    document.getElementById('hora-reservado').className = '';
+                    document.getElementById('check').className = 'fas fa-check-double blue-text';
+                    document.getElementById('badge-reservado').className = 'fas fa-check-double blue-text';
+                }).catch(reason => {
+                    console.error(reason);
+                });
+            }
+        }.bind(this));
+    });
 
     if (sessionStorage.unidade === undefined) {
         new Acesso({page: containeracesso});
