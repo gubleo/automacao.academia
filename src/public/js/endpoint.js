@@ -14,7 +14,6 @@ class EndPoint {
                     resolve(response);
                 }
             }).fail(function (jqXHR) {
-                this.ObtemErro(jqXHR);
                 reject();
             }.bind(this));
         });
@@ -32,13 +31,6 @@ class EndPoint {
                 reject(jqXHR);
             });
         });
-    }
-
-    ObtemErro(jqXHR) {
-        if (jqXHR.responseJSON !== undefined)
-            reject(new Error(jqXHR.responseJSON.message));
-        console.error(jqXHR);
-        return undefined;
     }
 
 }
