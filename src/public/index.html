@@ -237,8 +237,14 @@
                 let linha = modelo.content.cloneNode(true);
                 linha.getElementById('nome').innerText = item.nome.split(' ')[0].initCap();
 
-                if (item.foto1 !== null)
-                    linha.getElementById('foto').style.backgroundImage = 'url("' + item.foto1 + '")';
+                if (item.foto1 !== null && item.foto1.length > 100) {
+                    let foto = linha.getElementById('foto-usuario');
+                    foto.style.backgroundImage = 'url("' + item.foto1 + '")';
+                    foto.style.backgroundRepeat = 'no-repeat';
+                    foto.style.backgroundPosition = 'center';
+                    foto.style.backgroundSize = 'cover'
+                }
+
 
                 linha.getElementById('num').addEventListener('click', function () {
                     window.dispatchEvent(new CustomEvent('AoSelecionarMorador', {
