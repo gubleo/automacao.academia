@@ -1,23 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title></title>
 </head>
+
 <body>
 <h3 class="mt-5">Horários disponíveis</h3>
 <h5 class="text-muted font-small mb-4">Consulte os horários disponíveis para o uso do espaço. </h5>
 
     <template id="tplagendamentos">
         <div id="hora" class="single-news mt-3">
-            <div class="row"><!-- data-toggle="modal" data-target="#modal-confirm" -->
-                <div class="col-md-9 agendsmentos border-bottom-reservas hoverable waves-effect">
+            <div class="row">
+                <div id="hora-reservado" class="col-md-9 agendamentos border-bottom-reservas hoverable waves-effect">
                     <p class="dark-grey-text mt-3" id="horario"></p>
                     <div class="d-flex justify-content-between">
                         <div class="col-11 pl-0 mb-3">
                             <span class="dark-grey-text" id="situacao"></span>
+                            <button id="cancelar-reserva" class="hidden" style="z-index: 999999">Cancelar</button>
                         </div>
-                        <button id="cancelar-reserva" class="hidden"></button>
                         <a><i id="check" class="fas fa-angle-double-right light-grey"></i></a>
                     </div>
                 </div>
