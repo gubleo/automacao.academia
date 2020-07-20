@@ -128,7 +128,12 @@ class Agendamentos extends EndPoint {
                 }.bind(this));
 
             } else {
-                hora.className = 'col-md-9 agendamentos border-bottom-reservado';
+
+                linha.getElementById('cancelar-reserva').addEventListener('click', function () {
+                    window.dispatchEvent(new CustomEvent('AoSolicitar', {}));
+                }.bind(this));
+
+                linha.getElementById('hora-reservado').className = 'col-md-9 agendamentos border-bottom-reservado';
                 linha.getElementById('check').className = 'fas fa-check-double blue-text';
             }
             gridagendamentos.appendChild(linha);
