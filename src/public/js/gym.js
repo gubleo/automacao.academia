@@ -6,7 +6,6 @@ let gym = function() {
     let containeracesso = document.getElementById('acesso');
     let containermoradores = document.getElementById('moradores');
     let containeragendamentos = document.getElementById('agendamentos');
-    //let btnconfirmar = document.getElementById('btnconfirmar');
     let finaliza = document.getElementById('finaliza');
     let aguarde = document.getElementById('aguarde');
 
@@ -88,12 +87,9 @@ let gym = function() {
     window.addEventListener('AoSolicitarCancelamento', function (e) {
         messages.materialConfirm('Atenção', 'Você confirma o cancelamento desta reserva?', function (result) {
             if (result === true) {
-                console.debug(e.detail);
-                agenda.CancelaReserva(e.detail.horario.id).then(value => {
-                    console.debug(value);
-                    document.getElementById('hora-reservado').className = '';
-                    document.getElementById('check').className = 'fas fa-check-double blue-text';
-                    document.getElementById('badge-reservado').className = 'fas fa-check-double blue-text';
+                console.debug(e.detail.id);
+                agenda.CancelaReserva(e.detail.id).then(value => {
+                    console.debug(document.getElementById('hora-reservado'))
                 }).catch(reason => {
                     console.error(reason);
                 });
