@@ -14,13 +14,19 @@
         <div id="hora" class="single-news mt-3">
             <div class="row">
                 <div id="hora-reservado" class="col-md-9 agendamentos border-bottom-reservas hoverable waves-effect">
-                    <p class="dark-grey-text mt-3" id="horario"></p>
+                    <div>
+                        <span id="badge-reservado" class="badge badge-primary hidden float-right">Reservado</span>
+                        <p class="dark-grey-text mt-3" id="horario"></p>
+                    </div>
+
                     <div class="d-flex justify-content-between">
                         <div class="col-11 pl-0 mb-3">
                             <span class="dark-grey-text" id="situacao"></span>
-                            <button id="cancelar-reserva" class="hidden" style="z-index: 999999">Cancelar</button>
+                            <button id="cancelar-reserva" type="button" class="btn-sm btn border-btn-cancel hidden float-left"><i class="fas fa-ban red-text" aria-hidden="true"></i> Cancelar Reserva</button>
                         </div>
-                        <a><i id="check" class="fas fa-angle-double-right light-grey"></i></a>
+                        <div class="mt-2">
+                        <i id="check" class="fas fa-angle-double-right light-grey"></i>
+                        </div>
                     </div>
                 </div>
             </div>
