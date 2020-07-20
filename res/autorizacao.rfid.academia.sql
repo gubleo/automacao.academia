@@ -203,3 +203,6 @@ BEGIN
 END ;
 
 $$;
+
+
+select acesso.autorizacao_rfid_webservice_academia('{"eq":"2488","li":"0","rfid":"1EBC5"}');
