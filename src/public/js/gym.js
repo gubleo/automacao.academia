@@ -87,9 +87,9 @@ let gym = function() {
     window.addEventListener('AoSolicitarCancelamento', function (e) {
         messages.materialConfirm('Atenção', 'Você confirma o cancelamento desta reserva?', function (result) {
             if (result === true) {
-                console.debug(e.detail.id);
                 agenda.CancelaReserva(e.detail.id).then(value => {
-                    console.debug(document.getElementById('hora-reservado'))
+                    aguarde.style.display = 'block';
+                    agenda = new Agendamentos({page: containeragendamentos, unidade: unidade, morador: morador});
                 }).catch(reason => {
                     console.error(reason);
                 });

@@ -134,7 +134,7 @@ class Agendamentos extends EndPoint {
                     Accept: 'application/vnd.pgrst.object+json'
                 },
                 success: function (response) {
-                    console.debug(response);
+                    resolve(response);
                 }.bind(this),
                 data: {id: id}
             }).fail(function (jqXHR) {
