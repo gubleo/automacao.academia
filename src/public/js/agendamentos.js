@@ -89,7 +89,7 @@ class Agendamentos extends EndPoint {
                     cancelar.addEventListener('click', function () {
                         window.dispatchEvent(new CustomEvent('AoSolicitarCancelamento', {
                             detail: {
-                                horario: {id: reserva}
+                                horario: reserva.id
                             }
                         }));
                     });
@@ -133,9 +133,9 @@ class Agendamentos extends EndPoint {
                     Accept: 'application/vnd.pgrst.object+json'
                 },
                 success: function (response) {
-                    resolve(response.gymdel);
+                    console.debug(response);
                 }.bind(this),
-                data: {x: 0, id: id, cmd:'del'}
+                data: {id: id}
             }).fail(function (jqXHR) {
                 reject(jqXHR.responseJSON.message);
             });
