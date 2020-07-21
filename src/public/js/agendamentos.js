@@ -8,13 +8,20 @@ class Agendamentos extends EndPoint {
         this.AbrirRecurso('html/listaagenda.html').then(value => {
             params.page.innerHTML = value.toString();
 
-            let today = new Date();
-            let dd = String(today.getDate()).padStart(2, '0');
-            let mm = String(today.getMonth() + 1).padStart(2, '0');
-            let yyyy = today.getFullYear();
-            let data = `${yyyy}-${mm}-${dd}`;
-            this.ListaAgendamentos(data).then(agendamentos => {
-                this.Listar('select=id,horario&autenticacao=eq.' + params.morador.autenticacao + '&data=eq.' + data).then(reservado => {
+            document.getElementById('btnhoje').addEventListener('click', function () {
+                window.dispatchEvent(new CustomEvent('AoSelecionarData', {
+                    detail: window.hoje()
+                }));
+            });
+
+            document.getElementById('btnamanha').addEventListener('click', function () {
+                window.dispatchEvent(new CustomEvent('AoSelecionarData', {
+                    detail: window.amanha()
+                }));
+            });
+
+            this.ListaAgendamentos(params.data).then(agendamentos => {
+                this.Listar('select=id,horario&autenticacao=eq.' + params.morador.autenticacao + '&data=eq.' + params.data).then(reservado => {
                     this.MontaAgendamentos(agendamentos, reservado);
                 });
             })
@@ -65,21 +72,14 @@ class Agendamentos extends EndPoint {
                 linha.getElementById('situacao').innerText = item.situacao;
                 hora.addEventListener('click', function () {
 
-                    let today = new Date();
-                    let dd = String(today.getDate()).padStart(2, '0');
-                    let mm = String(today.getMonth() + 1).padStart(2, '0');
-                    let yyyy = today.getFullYear();
-                    let data = `${yyyy}-${mm}-${dd}`;
-
                     this.Listar('select=horario&autenticacao=eq.' + this.params.morador.autenticacao +
-                        '&data=eq.' + data + '&horario=gt.'+ today.getHours()).then(reservado => {
+                        '&data=eq.' + this.params.data + '&horario=gt.'+ new Date().getHours()).then(reservado => {
                         window.dispatchEvent(new CustomEvent('AoSelecionarHorario', {
                             detail: {
-                                horario: {selecionado: item.hora, reservas: reservado}
+                                info: {data: this.params.data, horario: item.hora, reservas: reservado}
                             }
                         }));
                     });
-
 
                 }.bind(this));
 

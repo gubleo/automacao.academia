@@ -14,19 +14,14 @@ let gym = function() {
         new Moradores({page: containermoradores, unidade: unidade});
     };
 
-    this.ConfirmaHorario = function (horario) {
-        let today = new Date();
-        let dd = String(today.getDate()).padStart(2, '0');
-        let mm = String(today.getMonth() + 1).padStart(2, '0');
-        let yyyy = today.getFullYear();
-        let data = `${yyyy}-${mm}-${dd}`;
+    this.ConfirmaHorario = function (info) {
 
-        agenda.Reservar({data: data, horario: horario, morador: morador.autenticacao}).then(() => {
+        agenda.Reservar({data: info.data, horario: info.horario, morador: morador.autenticacao}).then(() => {
             new EndPoint().AbrirRecurso('html/finaliza.html').then(finalizapage => {
                 finaliza.innerHTML = finalizapage.toString();
                 document.getElementById('morador').innerText = morador.nome.split(' ')[0].initCap();
-                document.getElementById('data').innerText = `${dd}/${mm}/${yyyy}`;
-                document.getElementById('horario').innerText = horario;
+                document.getElementById('data').innerText = info.data;
+                document.getElementById('horario').innerText = info.horario;
                 containeragendamentos.style.display = 'none';
                 finaliza.style.display = 'block';
                 sessionStorage.clear();
@@ -61,7 +56,7 @@ let gym = function() {
         morador = e.detail.morador;
         containermoradores.style.display = 'none';
         aguarde.style.display = 'block';
-        agenda = new Agendamentos({page: containeragendamentos, unidade: unidade, morador: morador});
+        agenda = new Agendamentos({page: containeragendamentos, unidade: unidade, morador: morador, data: window.hoje()});
     });
 
     window.addEventListener('AoCaregarAgendamentos', function () {
@@ -70,15 +65,14 @@ let gym = function() {
     });
 
     window.addEventListener('AoSelecionarHorario', function (e) {
-        this.horariodefinido = e.detail.horario.selecionado;
-        if (e.detail.horario.reservas.length > 0) {
+        if (e.detail.info.reservas.length > 0) {
             messages.alert('Atenção', 'Você ainda não concluiu a reserva anterior', function (result) {
                 console.log(result);
             });
         } else {
-            messages.materialConfirm('Atenção', 'Você confirma a reserva para as ' + e.detail.horario.selecionado + 'hs?', function (result) {
+            messages.materialConfirm('Atenção', 'Você confirma a reserva para as ' + e.detail.info.horario + 'hs?', function (result) {
                 if (result === true) {
-                    this.ConfirmaHorario(e.detail.horario.selecionado);
+                    this.ConfirmaHorario({data: e.detail.info.data, horario: e.detail.info.horario});
                 }
             }.bind(this));
         }
@@ -89,13 +83,18 @@ let gym = function() {
             if (result === true) {
                 agenda.CancelaReserva(e.detail.id).then(value => {
                     aguarde.style.display = 'block';
-                    agenda = new Agendamentos({page: containeragendamentos, unidade: unidade, morador: morador});
+                    agenda = new Agendamentos({page: containeragendamentos, unidade: unidade, morador: morador, data: window.hoje()});
                 }).catch(reason => {
                     console.error(reason);
                 });
             }
         }.bind(this));
     });
+
+    window.addEventListener('AoSelecionarData', function (e) {
+        agenda = new Agendamentos({page: containeragendamentos, unidade: unidade, morador: morador, data: e.detail});
+    });
+
 
     if (sessionStorage.unidade === undefined) {
         new Acesso({page: containeracesso});
@@ -110,6 +109,27 @@ String.prototype.initCap = function () {
     return this.toLowerCase().replace(/(?:^|\s)[a-z]/g, function (m) {
         return m.toUpperCase();
     });
+};
+
+window.hoje = function() {
+
+    let today = new Date();
+    let dd = String(today.getDate()).padStart(2, '0');
+    let mm = String(today.getMonth() + 1).padStart(2, '0');
+    let yyyy = today.getFullYear();
+    return `${yyyy}-${mm}-${dd}`;
+
+};
+
+window.amanha = function() {
+
+    let tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    let dd = String(tomorrow.getDate()).padStart(2, '0');
+    let mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
+    let yyyy = tomorrow.getFullYear();
+    return `${yyyy}-${mm}-${dd}`;
+
 };
 
 window.messages = function() {
