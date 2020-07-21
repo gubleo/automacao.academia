@@ -27,6 +27,19 @@
     color: black;
 }
 
+.border-btn-hoje{
+    border-left: solid 4px deepskyblue;
+    background-color: white;
+    color: black;
+}
+
+.border-btn-amanha{
+    border-left: solid 4px #d41ed4;
+    background-color: white;
+    color: black;
+    z-index: 9999;
+}
+
 .naopermitido{
     background-color: rgba(234, 234, 234, 0.38);
     border-left: solid 5px #7f7e7e;
@@ -200,4 +213,10 @@
 
 .nav__icon {
     font-size: 18px;
+}
+
+@media only screen and (max-width: 600px) {
+    .espacamento-icon {
+        background-color: lightblue;
+    }
 }

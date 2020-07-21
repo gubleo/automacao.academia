@@ -2,35 +2,36 @@
 <html lang="pt">
 <body>
 
-<!-- Default form login -->
-<form class="text-center mt-5" id="formlogin" action="#!">
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+        </div>
+        <div class="col-sm">
+            <form class="text-center mt-5" id="formlogin" action="#!">
 
-    <div class="logo card-img imgcenter"></div>
+                <div class="logo card-img imgcenter"></div>
 
-    <!--img class="logo card-img imgcenter" src="img/finaliza.jpg"/-->
-    <h5 class="text-center">Acesse sua conta</h5>
+                <h5 class="text-center">Acesse sua conta</h5>
 
+                <input type="email" id="usuario" class="form-control mb-4 mt-4" placeholder="Usuário">
 
-    <!-- Email -->
-    <input type="email" id="usuario" class="form-control mb-4 mt-4" placeholder="Usuário">
+                <input type="password" id="senha" class="form-control mb-4" placeholder="Senha">
 
-    <!-- Password -->
-    <input type="password" id="senha" class="form-control mb-4" placeholder="Senha">
-
-    <div class="d-flex justify-content-around">
-        <div>
-            <!-- Remember me -->
-            <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="defaultLoginFormRemember">
-                <label class="custom-control-label" for="defaultLoginFormRemember">Lembrar-me</label>
-            </div>
+                <div class="d-flex justify-content-around">
+                    <div>
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="defaultLoginFormRemember">
+                            <label class="custom-control-label" for="defaultLoginFormRemember">Lembrar-me</label>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-info btn-block my-4" id="btnacesso" type="submit">Entrar</button>
+            </form>
+        </div>
+        <div class="col-sm">
         </div>
     </div>
-
-    <!-- Sign in button -->
-    <button class="btn btn-info btn-block my-4" id="btnacesso" type="submit">Entrar</button>
-</form>
-<!-- Default form login -->
+</div>
 
 </body>
 </html>
