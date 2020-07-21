@@ -8,15 +8,23 @@ class Agendamentos extends EndPoint {
         this.AbrirRecurso('html/listaagenda.html').then(value => {
             params.page.innerHTML = value.toString();
 
-            document.getElementById('btnhoje').addEventListener('click', function () {
-                window.dispatchEvent(new CustomEvent('AoSelecionarData', {
-                    detail: window.hoje()
-                }));
-            });
+            console.debug(params.data === window.hoje());
 
-            document.getElementById('btnamanha').addEventListener('click', function () {
+            let btndata = document.getElementById('btndata');
+
+            btndata.innerHTML = '<span class="material-icons">keyboard_arrow_left</span> Hoje';
+            btndata.dataset.target = window.hoje();
+            btndata.className = 'btn btn-sm border-btn-hoje';
+
+            if (params.data === window.hoje()) {
+                btndata.innerHTML = 'Manhã <span class="material-icons">keyboard_arrow_right</span> ';
+                btndata.dataset.target = window.amanha();
+                btndata.className = 'btn btn-sm border-btn-amanha';
+            }
+
+            btndata.addEventListener('click', function () {
                 window.dispatchEvent(new CustomEvent('AoSelecionarData', {
-                    detail: window.amanha()
+                    detail: this.dataset.target
                 }));
             });
 
