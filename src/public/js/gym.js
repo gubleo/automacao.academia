@@ -70,7 +70,6 @@ let gym = function() {
     });
 
     window.addEventListener('AoSelecionarHorario', function (e) {
-        this.horariodefinido = e.detail.horario.selecionado;
         if (e.detail.horario.reservas.length > 0) {
             messages.alert('Atenção', 'Você ainda não concluiu a reserva anterior', function (result) {
                 console.log(result);
