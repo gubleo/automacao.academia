@@ -40,7 +40,7 @@ class Acesso extends EndPoint {
             success: function (response) {
                 window.dispatchEvent(new CustomEvent('AoLogar', {
                     detail: {
-                        unidade: response.gymlogin
+                        unidade: response
                     }
                 }));
             }.bind(this),
