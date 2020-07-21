@@ -218,5 +218,6 @@
 @media only screen and (max-width: 600px) {
     .espacamento-icon {
         background-color: lightblue;
+        display: in;
     }
 }
