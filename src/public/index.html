@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>Academia</title>
-    <link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon">
+
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
     <link rel="stylesheet" href="css/bootstrap.css">
@@ -18,24 +18,26 @@
 <body>
 
 
-<!--<nav class="nav">-->
-<!--    <a href="#" class="nav__link">-->
-<!--        <i class="material-icons nav__icon">home</i>-->
-<!--        <span class="nav__text">Inicio</span>-->
-<!--    </a>-->
-<!--    <a href="#" class="nav__link nav__link&#45;&#45;active">-->
-<!--        <i class="material-icons nav__icon">watch_later</i>-->
-<!--        <span class="nav__text">Agendamentos</span>-->
-<!--    </a>-->
-<!--    <a href="#" class="nav__link">-->
-<!--        <i class="material-icons nav__icon">supervisor_account</i>-->
-<!--        <span class="nav__text">Unidade</span>-->
-<!--    </a>-->
-<!--</nav>-->
+<nav class="nav" id="navegacao" style="visibility: hidden">
+    <a href="#" class="nav__link nav__link--active" id="nav-home">
+        <i class="material-icons nav__icon">home</i>
+        <span class="nav__text">Inicio</span>
+    </a>
+    <a href="#" class="nav__link" id="nav-moradores">
+        <i class="material-icons nav__icon">supervisor_account</i>
+        <span class="nav__text">Moradores</span>
+    </a>
+    <a href="#" class="nav__link" id="nav-historico">
+        <i class="material-icons nav__icon">watch_later</i>
+        <span class="nav__text">Histórico</span>
+    </a>
+
+</nav>
 
     <div class="container">
         <div class="col-sm">
             <div id="acesso" class="hidden form-text"></div>
+            <div id="home" class="hidden"></div>
             <div id="moradores" class="hidden"></div>
             <div id="agendamentos" class="hidden"></div>
             <div id="finaliza" class="hidden"></div>
@@ -70,6 +72,7 @@
 <script type="text/javascript" src="js/mdb.js"></script>
 <script type="text/javascript" src="js/endpoint.js"></script>
 <script type="text/javascript" src="js/acesso.js"></script>
+<script type="text/javascript" src="js/home.js"></script>
 <script type="text/javascript" src="js/agendamentos.js"></script>
 <script type="text/javascript" src="js/moradores.js"></script>
 <script type="text/javascript" src="js/gym.js"></script>
