@@ -7,24 +7,48 @@ let gym = function() {
     let containermoradores = document.getElementById('moradores');
     let containeragendamentos = document.getElementById('agendamentos');
     let finaliza = document.getElementById('finaliza');
+    let home = document.getElementById('home');
+    let historico = document.getElementById('historico');
     let aguarde = document.getElementById('aguarde');
+    let moradores = document.getElementById('moradores');
+    let navhome = document.getElementById('nav-home');
+    let navmoradores = document.getElementById('nav-moradores');
+    let navhistorico = document.getElementById('nav-historico');
+    let nav = document.getElementById('navegacao');
 
     this.Iniciar = function () {
+
+        unidade = JSON.parse(sessionStorage.unidade);
         aguarde.style.display = 'block';
-        new Moradores({page: containermoradores, unidade: unidade});
+        nav.style.visibility = 'visible';
+
+        navhome.addEventListener('click', function () {
+            new Home({page: home, unidade: unidade});
+            moradores.style.display = 'none';
+        });
+        navmoradores.addEventListener('click', function () {
+            home.style.display = 'none';
+            new Moradores({page: containermoradores, unidade: unidade});
+        });
+        navhistorico.addEventListener('click', function () {
+            home.style.display = 'none';
+            new Historico({page: historico, unidade: unidade})
+        });
+
+        new Home({page: home, unidade: unidade});
     };
 
     this.ConfirmaHorario = function (info) {
 
         agenda.Reservar({data: info.data, horario: info.horario, morador: morador.autenticacao}).then(() => {
             new EndPoint().AbrirRecurso('html/finaliza.html').then(finalizapage => {
+                console.debug(info);
                 finaliza.innerHTML = finalizapage.toString();
                 document.getElementById('morador').innerText = morador.nome.split(' ')[0].initCap();
                 document.getElementById('data').innerText = info.data;
                 document.getElementById('horario').innerText = info.horario;
                 containeragendamentos.style.display = 'none';
                 finaliza.style.display = 'block';
-                sessionStorage.clear();
             });
         }).catch(reason => {
             messages.alert('Atenção', reason, function (result) {
@@ -52,6 +76,11 @@ let gym = function() {
         aguarde.style.display = 'none';
     });
 
+    window.addEventListener('AoCaregarHome', function () {
+        home.style.display = 'block';
+        aguarde.style.display = 'none';
+    });
+
     window.addEventListener('AoSelecionarMorador', function (e) {
         morador = e.detail.morador;
         containermoradores.style.display = 'none';
@@ -75,6 +104,7 @@ let gym = function() {
                     this.ConfirmaHorario({data: e.detail.info.data, horario: e.detail.info.horario});
                 }
             }.bind(this));
+            //sss
         }
     }.bind(this));
 
@@ -93,6 +123,11 @@ let gym = function() {
 
     window.addEventListener('AoSelecionarData', function (e) {
         agenda = new Agendamentos({page: containeragendamentos, unidade: unidade, morador: morador, data: e.detail});
+    });
+
+    window.addEventListener('AoCaregarHistorico', function (e) {
+        historico.style.display = 'block';
+        aguarde.style.display = 'none';
     });
 
 
