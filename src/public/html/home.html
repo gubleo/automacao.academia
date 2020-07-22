@@ -9,26 +9,33 @@
     <div class="row">
         <div class="col-6">
             <h5 class="mt-4 black-text">Bem-Vindo(a),</h5>
-            <h4 id="responsavel" class="mb-3"></h4>
-            <span class="font-small">Torre</span>
+            <h4 id="responsavel" class="mb-3 text-muted"></h4>
 
-            <span id="bloco" class="font-small mb-3"></span>
-            <span class="font-small">Unidade:</span>
+            <span class="font-small text-muted">
+                <i class="fas fa-building fa-sm"></i>
+                <span id="bloco" class="font-small mb-3"></span>
+            </span>
 
+            <span class="font-small text-muted"> - </span>
+
+            <span class="font-small text-muted">
+            <i class="fas fa-home"></i>
             <span id="unidade" class="font-small mb-3"></span>
+            </span>
         </div>
+
         <div class="col-5">
-            <img src="img/anima.png" class="mt-4" style="width: 140px; height: 80px;">
+            <img src="img/anima.png" class="mt-4" style="width: 140px;">
         </div>
     </div>
 
-    <hr class="hr-light">
+    <hr class="mb-4">
 
     <div class="alert alert-success" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
-        <span>Atenção ao Expediente da Academia</span>
+        <span><i class="fas fa-exclamation-triangle fa-sm mr-1"></i> Atenção ao Expediente da Academia</span>
         <hr>
         <p class="font-small">Devido ao período da pandemia provocada pelo Covid-19, os horários de expedientes podem
             sofrer alterações.</p>
@@ -79,9 +86,9 @@
 
 </div>
 
-<button type="button" class="btn btn-primary col-10 col-lg-3 align-content-center ml-4 mt-4">Ir para o Agendamento</button>
+<button id="iniciaragendamentos" type="button" class="btn btn-primary col-10 col-lg-3 align-content-center ml-4 mt-4">Ir para o Agendamento <i class="fas fa-running"></i></button>
 
-<div style="margin-bottom: 100px;"></div>
+<div style="margin-bottom: 80px;"></div>
 
 </body>
 </html>
