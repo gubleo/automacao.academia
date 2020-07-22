@@ -61,8 +61,7 @@ let gym = function() {
                 console.debug(info);
                 finaliza.innerHTML = finalizapage.toString();
                 document.getElementById('morador').innerText = morador.nome.split(' ')[0].initCap();
-                document.getElementById('data').innerText = info.data;
-                document.getElementById('horario').innerText = info.horario;
+                document.getElementById('data').innerText = info.data + ' às ' + info.horario + ' horas';
                 containeragendamentos.style.display = 'none';
                 finaliza.style.display = 'block';
             });
@@ -120,7 +119,7 @@ let gym = function() {
                 console.log(result);
             });
         } else {
-            messages.materialConfirm('Atenção', 'Você confirma a reserva para as ' + e.detail.info.horario + 'hs?', function (result) {
+            messages.materialConfirm('Confirmação de Reserva', 'Você confirma a reserva para as ' + e.detail.info.horario + ' horas?', function (result) {
                 if (result === true) {
                     this.ConfirmaHorario({data: e.detail.info.data, horario: e.detail.info.horario});
                 }

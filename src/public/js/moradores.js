@@ -36,7 +36,7 @@ class Moradores extends EndPoint {
                     hora.className = 'font-small ml-1 row blue-text';
                 }
             } else {
-                hora.innerText = 'Não possui nenhuma reserva';
+                hora.innerText = 'Não possui nenhuma reserva para hoje';
                 linha.getElementById('num').className = 'row mt-3 p-3 pointer-event waves-effect border-bottom-reservas';
             }
 

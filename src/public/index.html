@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Academia</title>
+    <title>Anima - Reserva de Horário Academia</title>
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
@@ -19,7 +19,7 @@
 
 
 <nav class="nav" id="navegacao" style="visibility: hidden">
-    <a href="#" class="nav__link nav__link--active" id="nav-home">
+    <a href="#" class="nav__link" id="nav-home">
         <i class="material-icons nav__icon">home</i>
         <span class="nav__text">Inicio</span>
     </a>
@@ -50,15 +50,18 @@
     <div id="materialModal" class="hide">
         <div id="materialModalCentered">
             <div id="materialModalContent">
+                <div style="border-left: solid 4px orange; margin-right: -2px;">
                 <div id="materialModalTitle">
                 </div>
+                </div>
+                <hr>
                 <div id="materialModalText">
                 </div>
                 <div id="materialModalButtons">
-                    <div id="materialModalButtonOK" class="materialModalButton">
+                    <div id="materialModalButtonOK" class="materialModalButton btn-sm btn">
                         Ok
                     </div>
-                    <div id="materialModalButtonCANCEL" class="materialModalButton">
+                    <div id="materialModalButtonCANCEL" class="materialModalButton btn-sm btn btn-grey">
                         Cancelar
                     </div>
                 </div>
@@ -80,7 +83,6 @@
 <script type="text/javascript" src="js/moradores.js"></script>
 <script type="text/javascript" src="js/gym.js"></script>
 <script type="text/javascript">
-
     new gym();
 </script>
 </html>

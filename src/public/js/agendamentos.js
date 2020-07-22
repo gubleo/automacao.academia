@@ -8,7 +8,10 @@ class Agendamentos extends EndPoint {
         this.AbrirRecurso('html/listaagenda.html').then(value => {
             params.page.innerHTML = value.toString();
 
+            console.debug(params.data === window.hoje());
+
             let btndata = document.getElementById('btndata');
+
             btndata.innerHTML = '<i class="fas fa-angle-left fa-lg"> </i> Hoje';
             btndata.dataset.target = window.hoje();
             btndata.className = 'btn btn-sm border-btn-hoje';
@@ -98,7 +101,7 @@ class Agendamentos extends EndPoint {
                             }
                         }));
                     });
-                linha.getElementById('hora-reservado').className = 'col-md-9 agendamentos border-bottom-reservado';
+                linha.getElementById('hora-reservado').className = 'col-md-12 agendamentos border-bottom-reservado';
                 linha.getElementById('check').className = 'fas fa-check-double blue-text';
                 linha.getElementById('badge-reservado').className = 'badge badge-primary float-right';
             }
