@@ -16,6 +16,8 @@ let gym = function() {
     let navhistorico = document.getElementById('nav-historico');
     let nav = document.getElementById('navegacao');
 
+    let itensmenu = [containeracesso, containermoradores, containeragendamentos, finaliza, home, historico, moradores];
+
     this.Iniciar = function () {
 
         unidade = JSON.parse(sessionStorage.unidade);
@@ -23,19 +25,33 @@ let gym = function() {
         nav.style.visibility = 'visible';
 
         navhome.addEventListener('click', function () {
+            this.AtivarItemMenu(home);
             new Home({page: home, unidade: unidade});
-            moradores.style.display = 'none';
-        });
+        }.bind(this));
+
         navmoradores.addEventListener('click', function () {
-            home.style.display = 'none';
+            this.AtivarItemMenu(containermoradores);
             new Moradores({page: containermoradores, unidade: unidade});
-        });
+        }.bind(this));
+
         navhistorico.addEventListener('click', function () {
-            home.style.display = 'none';
+            this.AtivarItemMenu(historico);
             new Historico({page: historico, unidade: unidade})
-        });
+        }.bind(this));
 
         new Home({page: home, unidade: unidade});
+    };
+
+    this.AtivarItemMenu = function(ativar) {
+        itensmenu.filter(function (item) {
+            console.debug(item);
+            if (ativar !== item) {
+                item.style.display = 'none';
+            } else {
+                item.style.display = 'block';
+            }
+        });
+        aguarde.style.display = 'block';
     };
 
     this.ConfirmaHorario = function (info) {
@@ -79,7 +95,12 @@ let gym = function() {
     window.addEventListener('AoCaregarHome', function () {
         home.style.display = 'block';
         aguarde.style.display = 'none';
-    });
+        document.getElementById('iniciaragendamentos').addEventListener('click', function () {
+            this.AtivarItemMenu(containermoradores);
+            new Moradores({page: containermoradores, unidade: unidade});
+        }.bind(this));
+
+    }.bind(this));
 
     window.addEventListener('AoSelecionarMorador', function (e) {
         morador = e.detail.morador;

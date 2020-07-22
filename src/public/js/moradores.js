@@ -6,7 +6,7 @@ class Moradores extends EndPoint {
 
         this.AbrirRecurso('html/listamoradores.html').then(value => {
             params.page.innerHTML = value.toString();
-            this.Listar(params.unidade).then(value => {
+            this.Listar(params.unidade.num).then(value => {
                 this.MontaListView(value);
             });
         });
@@ -32,12 +32,11 @@ class Moradores extends EndPoint {
                 if (item.hora > new Date().getHours()) {
                     hora.innerText =  'Reservado às ' + item.hora  + ' horas';
                 } else {
-                    hora.innerText = 'Em progresso';
-                    hora.className = 'border-bottom-reservas';
-
+                    hora.innerText = 'Reserva finalizada as ' + item.hora + 'hs';
+                    hora.className = 'font-small ml-1 row blue-text';
                 }
             } else {
-                hora.innerText = 'Não possui nenhuma reserva.';
+                hora.innerText = 'Não possui nenhuma reserva';
                 linha.getElementById('num').className = 'row mt-3 p-3 pointer-event waves-effect border-bottom-reservas';
             }
 

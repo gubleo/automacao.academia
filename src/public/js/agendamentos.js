@@ -8,16 +8,13 @@ class Agendamentos extends EndPoint {
         this.AbrirRecurso('html/listaagenda.html').then(value => {
             params.page.innerHTML = value.toString();
 
-            console.debug(params.data === window.hoje());
-
             let btndata = document.getElementById('btndata');
-
-            btndata.innerHTML = '<span class="material-icons">keyboard_arrow_left</span> Hoje';
+            btndata.innerHTML = '<i class="fas fa-angle-left fa-lg"> </i> Hoje';
             btndata.dataset.target = window.hoje();
             btndata.className = 'btn btn-sm border-btn-hoje';
 
             if (params.data === window.hoje()) {
-                btndata.innerHTML = 'Manhã <span class="material-icons">keyboard_arrow_right</span> ';
+                btndata.innerHTML = '<i class="fas fa-angle-right fa-lg"> </i> Manhã';
                 btndata.dataset.target = window.amanha();
                 btndata.className = 'btn btn-sm border-btn-amanha';
             }
