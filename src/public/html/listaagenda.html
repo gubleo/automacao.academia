@@ -7,18 +7,39 @@
 </head>
 
 <body>
-<h3 class="mt-5">Horários disponíveis</h3>
+
+<h3 class="mt-5">Datas e horários disponíveis</h3>
 <h5 class="text-muted font-small mb-4">Consulte os horários disponíveis para o uso do espaço. </h5>
+
+<hr>
 
 <div class="row">
     <div class="col-sm">
         <div class="row">
             <div class="col-6 col-md-6">
-                <button id="btndata" data-target="" type="button" aria-pressed="true"
-                        class="btn btn-sm border-btn-hoje"></button>
+                <fieldset data-role="controlgroup" data-type="horizontal" style="margin-left: 3px">
+                    <p for="localagenda" class="mb-2">Local da reserva</label>
+
+                    <select  id="localagenda" class="browser-default custom-select">
+                        <option value="" disabled selected>Selecione o Local da Reserva</option>
+                        <option value="ac">Academia</option>
+                        <option value="bk">Sala de bikes</option>
+                    </select>
+                </fieldset>
+            </div>
+        </div>
+        <div class="row">
+            <div class="container">
+                <button type="button" class="btn waves-effect datepicker fieldset__input js__datepicker picker__input border-btn-hoje" type="text" readonly="" id="pkdata" aria-haspopup="true" aria-expanded="false" aria-readonly="false" aria-owns="P705720435_root" style="margin-left: -2px; border-radius: 8px"><i class="far fa-calendar-alt pr-2" aria-hidden="true"></i> Selecionar data
+
+            </button>
+
+                <!--button id="btndata" data-target="" type="button" aria-pressed="true" class="btn btn-sm border-btn-hoje"></button-->
             </div>
         </div>
     </div>
+    <hr>
+
     <div class="col-sm">
     </div>
     <div class="col-sm">
