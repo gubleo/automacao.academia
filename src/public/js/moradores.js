@@ -6,10 +6,29 @@ class Moradores extends EndPoint {
 
         this.AbrirRecurso('html/listamoradores.html').then(value => {
             params.page.innerHTML = value.toString();
-            this.Listar(params.unidade.num).then(value => {
+            this.ListaMoradores(params.unidade.num).then(value => {
                 this.MontaListView(value);
             });
         });
+    }
+
+    ListaMoradores(unidade) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                type: 'POST',
+                url: '/condominio/rpc/gymlistusers',
+                headers: {
+                    Prefer: 'params=single-object',
+                },
+                dataType: 'json',
+                success: function (response) {
+                    resolve(response);
+                }.bind(this),
+                data: {unidade: unidade}
+            }).fail(function (jqXHR) {
+                reject(jqXHR);
+            });
+        })
     }
 
     MontaListView(lista) {
