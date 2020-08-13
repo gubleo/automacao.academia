@@ -40,9 +40,7 @@ class Acesso extends EndPoint {
             success: function (response) {
                 window.usuario = usuario;
                 window.dispatchEvent(new CustomEvent('AoLogar', {
-                    detail: {
-                        unidade: response
-                    }
+                    detail: {unidade: response, usuario: usuario}
                 }));
             }.bind(this),
             data: {usuario: usuario, pass: senha}
