@@ -2,7 +2,7 @@ let gym = function() {
 
     let messages = new window.messages();
 
-    let unidade = null, morador = null, agenda;
+    let unidade = null, morador = null, usuario = null, agenda;
     let containeracesso = document.getElementById('acesso');
     let containermoradores = document.getElementById('moradores');
     let containeragendamentos = document.getElementById('agendamentos');
@@ -58,7 +58,13 @@ let gym = function() {
         agenda.Reservar({data: info.data, horario: info.horario, morador: morador.autenticacao, local: info.local}).then(() => {
             new EndPoint().AbrirRecurso('html/finaliza.html').then(finalizapage => {
                 finaliza.innerHTML = finalizapage.toString();
+
+                let local = 'Aademia';
+                if (info.local === 'bk')
+                    local = 'Sala de bike';
+
                 document.getElementById('morador').innerText = morador.nome.split(' ')[0].initCap();
+                document.getElementById('local').innerText = local;
                 document.getElementById('data').innerText = info.data + ' às ' + info.horario + ' horas';
                 containeragendamentos.style.display = 'none';
                 finaliza.style.display = 'block';
@@ -75,6 +81,7 @@ let gym = function() {
 
     window.addEventListener('AoLogar', function (e) {
         unidade = e.detail.unidade;
+        usuario = e.detail.usuario;
         sessionStorage.unidade = JSON.stringify(unidade);
         containeracesso.style.display = 'none';
         this.Iniciar();
@@ -129,7 +136,7 @@ let gym = function() {
     window.addEventListener('AoSolicitarCancelamento', function (e) {
         messages.materialConfirm('Atenção', 'Você confirma o cancelamento desta reserva?', function (result) {
             if (result === true) {
-                agenda.CancelaReserva(e.detail.id).then(value => {
+                agenda.CancelaReserva({id: e.detail.id, usuario: usuario}).then(value => {
                     aguarde.style.display = 'block';
                     agenda = new Agendamentos({page: containeragendamentos, unidade: unidade, morador: morador, data: window.hoje()});
                 }).catch(reason => {
