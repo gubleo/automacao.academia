@@ -40,7 +40,7 @@ class Moradores extends EndPoint {
 
             let linha = modelo.content.cloneNode(true);
             linha.getElementById('nome').innerText = item.nome.initCap();
-            linha.getElementById('idade').innerText = item.idade;
+            // linha.getElementById('idade').innerText = item.idade;
 
             let hora = linha.getElementById('hora');
                 hora.className = 'ml-1 font-small row grey-text';
@@ -68,7 +68,23 @@ class Moradores extends EndPoint {
                 foto.style.backgroundSize = 'cover'
             }
 
-            if (item.idade === null) {
+            console.debug(item);
+            if (item.idade === 'inferior') {
+
+                linha.getElementById('num').className = 'row mt-3 p-3 border-bottom2 naopermitido';
+                linha.getElementById('iconemorador').className = '';
+                linha.getElementById('idade').innerText = 'Não possui idade suficiente.';
+                hora.style.display = 'none';
+
+            } else {
+
+                
+                if (item.idade === 'acompanhante') {
+                    linha.getElementById('num').className = 'row mt-3 p-3 border-bottom2 acompanhante';
+                    linha.getElementById('idade').innerHTML = '<i class="fas fa-exclamation-triangle mr-1 pt-1"></i> Necessário acompanhante da Unidade.';
+                    hora.style.display = 'none';
+                }
+
                 linha.getElementById('num').addEventListener('click', function () {
                     window.dispatchEvent(new CustomEvent('AoSelecionarMorador', {
                         detail: {
@@ -76,10 +92,7 @@ class Moradores extends EndPoint {
                         }
                     }));
                 });
-            } else {
-                linha.getElementById('num').className = 'row mt-3 p-3 border-bottom2 naopermitido';
-                linha.getElementById('iconemorador').className = '';
-                hora.style.display = 'none';
+
             }
 
             gridmoradores.appendChild(linha);
