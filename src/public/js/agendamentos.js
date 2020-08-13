@@ -170,8 +170,7 @@ class Agendamentos extends EndPoint {
      * @returns {Promise<unknown>}
      * @constructor
      */
-    CancelaReserva(id) {
-        console.debug({id: id, usuario: window.usuario});
+    CancelaReserva(info) {
         return new Promise((resolve, reject) => {
             $.ajax({
                 type: 'POST',
@@ -184,7 +183,7 @@ class Agendamentos extends EndPoint {
                 success: function (response) {
                     resolve(response);
                 }.bind(this),
-                data: {id: id, usuario: window.usuario}
+                data: info
             }).fail(function (jqXHR) {
                 reject(jqXHR.responseJSON.message);
             });
