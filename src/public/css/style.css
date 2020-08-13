@@ -57,6 +57,11 @@
     border-left: solid 5px #7f7e7e;
 }
 
+.acompanhante{
+     border-left: solid 5px yellow;
+     cursor: pointer;
+ }
+
 .light-grey{
     color: rgba(211, 211, 211, 0.45);
 }
