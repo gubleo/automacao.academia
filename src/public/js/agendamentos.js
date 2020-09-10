@@ -26,9 +26,20 @@ class Agendamentos extends EndPoint {
                 localagenda = seletorlocal.value;
             }.bind(this));
 
+            Date.prototype.addDays = function(days) {
+                let date = new Date(this.valueOf());
+                date.setDate(date.getDate() + days);
+                return date;
+            };
+
+            let date = new Date();
+
+            console.log(date.addDays(5));
+
             let $input = $('.datepicker').pickadate({
                 formatSubmit: 'yyyy-mm-dd',
-                min: new Date(2020,7,13),
+                min: new Date(),
+                max: date.addDays(32)
             });
 
             let picker = $input.pickadate('picker');

@@ -12,8 +12,14 @@ class Acesso extends EndPoint {
 
     SolicitaLogin() {
 
+
+
         let usuario = document.getElementById('usuario').value;
         let senha = document.getElementById('senha').value;
+
+
+        // let usuario = 'oberdan';
+        // let senha = 'yu45thn@';
 
         let message = new window.messages();
 

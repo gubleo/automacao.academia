@@ -19,6 +19,12 @@
     border-bottom: solid 1px rgba(211, 211, 211, 0.19);
 }
 
+.border-log{
+    border: solid 1px #b1b1b1;
+    border-radius: 10px;
+
+}
+
 .border-bottom-historico{
     box-shadow:   0 5px 10px rgba(0, 0, 0, 0.19);
     border-radius: 6px 6px 6px 6px;

@@ -1,22 +1,35 @@
+let unidade = null, morador = null, usuario = null, agenda;
+let containeracesso = document.getElementById('acesso');
+let containermoradores = document.getElementById('moradores');
+let containeragendamentos = document.getElementById('agendamentos');
+let finaliza = document.getElementById('finaliza');
+let home = document.getElementById('home');
+let historico = document.getElementById('historico');
+let aguarde = document.getElementById('aguarde');
+let moradores = document.getElementById('moradores');
+let navhome = document.getElementById('nav-home');
+let navmoradores = document.getElementById('nav-moradores');
+let navhistorico = document.getElementById('nav-historico');
+let nav = document.getElementById('navegacao');
+
+let itensmenu = [containeracesso, containermoradores, containeragendamentos, finaliza, home, historico, moradores];
+
+AtivarItemMenu = function(ativar) {
+    itensmenu.filter(function (item) {
+        if (ativar !== item) {
+            item.style.display = 'none';
+        } else {
+            item.style.display = 'block';
+        }
+    });
+    document.getElementById('novidades').style.display = 'none';
+
+    aguarde.style.display = 'block';
+};
+
 let gym = function() {
 
     let messages = new window.messages();
-
-    let unidade = null, morador = null, usuario = null, agenda;
-    let containeracesso = document.getElementById('acesso');
-    let containermoradores = document.getElementById('moradores');
-    let containeragendamentos = document.getElementById('agendamentos');
-    let finaliza = document.getElementById('finaliza');
-    let home = document.getElementById('home');
-    let historico = document.getElementById('historico');
-    let aguarde = document.getElementById('aguarde');
-    let moradores = document.getElementById('moradores');
-    let navhome = document.getElementById('nav-home');
-    let navmoradores = document.getElementById('nav-moradores');
-    let navhistorico = document.getElementById('nav-historico');
-    let nav = document.getElementById('navegacao');
-
-    let itensmenu = [containeracesso, containermoradores, containeragendamentos, finaliza, home, historico, moradores];
 
     this.Iniciar = function () {
 
@@ -25,32 +38,21 @@ let gym = function() {
         nav.style.visibility = 'visible';
 
         navhome.addEventListener('click', function () {
-            this.AtivarItemMenu(home);
+            AtivarItemMenu(home);
             new Home({page: home, unidade: unidade});
         }.bind(this));
 
         navmoradores.addEventListener('click', function () {
-            this.AtivarItemMenu(containermoradores);
+            AtivarItemMenu(containermoradores);
             new Moradores({page: containermoradores, unidade: unidade});
         }.bind(this));
 
         navhistorico.addEventListener('click', function () {
-            this.AtivarItemMenu(historico);
+            AtivarItemMenu(historico);
             new Historico({page: historico, unidade: unidade})
         }.bind(this));
 
         new Home({page: home, unidade: unidade});
-    };
-
-    this.AtivarItemMenu = function(ativar) {
-        itensmenu.filter(function (item) {
-            if (ativar !== item) {
-                item.style.display = 'none';
-            } else {
-                item.style.display = 'block';
-            }
-        });
-        aguarde.style.display = 'block';
     };
 
     this.ConfirmaHorario = function (info) {
@@ -100,10 +102,28 @@ let gym = function() {
         home.style.display = 'block';
         aguarde.style.display = 'none';
         document.getElementById('iniciaragendamentos').addEventListener('click', function () {
-            this.AtivarItemMenu(containermoradores);
+            AtivarItemMenu(containermoradores);
             new Moradores({page: containermoradores, unidade: unidade});
         }.bind(this));
 
+        let novidades = document.getElementById('novidades');
+
+        let log = document.getElementById('log');
+        itensmenu.push(log);
+
+        log.addEventListener("click", function (){
+
+            AtivarItemMenu(log);
+            new Novidades({page: novidades});
+
+        }.bind(this));
+
+    }.bind(this));
+
+    window.addEventListener('AoCaregarNovidades', function () {
+        // let novidades = document.getElementById('novidades');
+        novidades.style.display = 'block';
+        aguarde.style.display = 'none';
     }.bind(this));
 
     window.addEventListener('AoSelecionarMorador', function (e) {
